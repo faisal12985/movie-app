@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Movie Search App</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+  <div class="container">
+    <h1>🎬 Movie Search App</h1>
+    <div class="search-box">
+      <input type="text" id="movieInput" placeholder="Enter movie name...">
+      <button id="searchBtn">Search</button>
+    </div>
+    <div id="movieGrid" class="movie-grid"></div>
+  </div>
+
+  
+  <div id="movieModal" class="modal">
+    <div class="modal-content">
+      <span id="closeModal" class="close">&times;</span>
+      <div id="modalDetails"></div>
+    </div>
+  </div>
+
+
+  <div class="container">
+  <h1>🎬 Movie Search App</h1>
+
+  <!-- Toggle Button -->
+  <button id="toggleMode">Public Domain Mode: OFF</button>
+
+  <div class="search-box">
+    <input type="text" id="movieInput" placeholder="Enter movie name...">
+    <button id="searchBtn">Search</button>
+  </div>
+
+  <div id="movieGrid" class="movie-grid"></div>
+</div>
+
+
+  <div id="modalDetails"></div>
+<script>
+  async function showMovieDetails(imdbID) {
+    const data = await fetch(`https://www.omdbapi.com/?apikey=${API_KEY}&i=${imdbID}&plot=full`)
+                     .then(res => res.json());
+    
+    let embedHtml = "";
+    if ( ["tt0063350"].includes(imdbID) ) {
+      // Example ID for Night of the Living Dead
+      embedHtml = `<h2>${data.Title}</h2>
+        <iframe src="https://archive.org/embed/Night_of_the_Living_Dead_1968" width="100%" height="360"></iframe>`;
+    } else {
+      embedHtml = await fetchTrailer(data.Title); // existing YouTube trailer function
+    }
+
+    modalDetails.innerHTML = `
+      <img src="${data.Poster}" alt="">
+      <p><strong>Plot:</strong> ${data.Plot}</p>
+      ${embedHtml}
+    `;
+  }
+</script>
+
+
+
+  <script src="index.js"></script>
+</body>
+</html>
